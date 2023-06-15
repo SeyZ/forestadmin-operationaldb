@@ -16,16 +16,14 @@ if (process.env.DATABASE_SSL && JSON.parse(process.env.DATABASE_SSL.toLowerCase(
 
 // This object allows to configure your Forest Admin panel
 const agent = createAgent<Schema>({
-  // Security tokens
   authSecret: process.env.FOREST_AUTH_SECRET!,
   envSecret: process.env.FOREST_ENV_SECRET!,
-
-  // Make sure to set NODE_ENV to 'production' when you deploy your project
   isProduction: process.env.NODE_ENV === 'production',
-
-  // Autocompletion of collection names and fields
   typingsPath: './typings.ts',
   typingsMaxDepth: 5,
+  experimental: {
+    webhookCustomActions: true,
+  }
 });
 
 // Connect your datasources
@@ -40,17 +38,11 @@ agent.addDataSource(
 
 // Operational DB
 agent.addDataSource(
-  createSqlDataSource('postgresql://postgres:Mjoq4g6QopJvnTCp@db.juazlhuakjwkvrlldebd.supabase.co:5432/postgres')
+  createSqlDataSource(process.env.OPERATIONAL_DATABASE_URL)
 );
 
 import { CompanyCollection } from './collections/companies';
 new CompanyCollection(agent).customize();
-
-agent.customizeCollection('SexyCompanies', collection => {
-  collection.addManyToOneRelation('company', 'companies', {
-    foreignKey: 'project_id',
-  });
-});
 
 // Expose an HTTP endpoint.
 agent.mountOnStandaloneServer(Number(process.env.APPLICATION_PORT));

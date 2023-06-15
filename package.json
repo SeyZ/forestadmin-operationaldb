@@ -14,10 +14,11 @@
     ]
   },
   "dependencies": {
+    "@forestadmin/agent": "^1.10.0",
+    "@forestadmin/datasource-sql": "^1.6.5",
     "dotenv": "^16.0.1",
-    "@forestadmin/agent": "^1.0.0",
-    "@forestadmin/datasource-sql": "^1.0.0",
-    "pg": "^8.8.0"
+    "jsonwebtoken": "^9.0.0",
+    "pg": "^8.11.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12",
